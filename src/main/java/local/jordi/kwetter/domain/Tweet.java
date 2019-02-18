@@ -1,18 +1,25 @@
 package local.jordi.kwetter.domain;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Tweet
+public class Tweet implements IDomainObject
 {
+    //@Id @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
     private long responseToId;
+
+    private List<Tweet> reactions;
+
+    private User author;
 
     private String text;
     private Date date;
-    private User author;
-    private List<Tweet> reactions;
+
+
 
     /**
      * Constructs the object
@@ -44,6 +51,11 @@ public class Tweet
     public long getId()
     {
         return id;
+    }
+
+    public void setId(long id)
+    {
+        this.id = id;
     }
 
     public boolean isReaction()

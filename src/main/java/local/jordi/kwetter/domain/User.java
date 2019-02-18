@@ -1,16 +1,14 @@
 package local.jordi.kwetter.domain;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class User
+public class User implements IDomainObject
 {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    //@Id @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     private String name;
@@ -120,9 +118,16 @@ public class User
         this.website = website;
     }
 
+    @Override
     public long getId()
     {
         return id;
+    }
+
+    @Override
+    public void setId(long id)
+    {
+        this.id = id;
     }
 
     public String getPassword()
@@ -142,6 +147,18 @@ public class User
     public List<Tweet> getTweets()
     {
         return tweets;
+    }
+
+    public List<Tweet> getLatest10Tweets()
+    {
+        List<Tweet> latestTweets = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++)
+        {
+            latestTweets.add(tweets.get(i));
+        }
+
+        return latestTweets;
     }
 
     public void addTweet(Tweet tweet)
