@@ -135,7 +135,7 @@ public class User implements IDomainObject
         return password;
     }
 
-    void setPassword(String password)
+    public void setPassword(String password)
     {
         if (password == null || password.isEmpty())
         {
