@@ -1,13 +1,13 @@
 package local.jordi.kwetter.dao.collection;
 
 import local.jordi.kwetter.dao.IDao;
-import local.jordi.kwetter.domain.IDomainObject;
+import local.jordi.kwetter.domain.AbstractDomainObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-public abstract class AbstractCollectionDao <T extends IDomainObject> implements IDao<T>
+public abstract class AbstractCollectionDao <T extends AbstractDomainObject> implements IDao<T>
 {
     AtomicLong atomicLong;
     List<T> objectList;

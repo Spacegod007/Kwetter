@@ -101,4 +101,19 @@ public class UserCollectionDaoTest
         Assertions.assertEquals(EXPECTED_CONTAINS_DELETED_OBJECT_RESULT, containsRemovedObject, "The removed object is still available in the database");
         Assertions.assertEquals(EXPECTED_CONTAINS_NOT_DELETED_OBJECT_RESULT, containsNotRemovedObject, "The object that should not have been removed has been removed from the database");
     }
+
+    @Test
+    public void UserWithNameExistsTest()
+    {
+        testUser1.getName();
+
+        boolean userWithNameExistsBeforeCreation = collectionUserDao.userWithNameExists(testUser1.getName());
+
+        User createdUser = collectionUserDao.Create(testUser1);
+
+        boolean userWithNameExistsAfterCreation = collectionUserDao.userWithNameExists(testUser1.getName());
+
+        Assertions.assertEquals(false, userWithNameExistsBeforeCreation, "User should not exist before creation");
+        Assertions.assertEquals(true, userWithNameExistsAfterCreation, "The user should exist after creation");
+    }
 }

@@ -1,23 +1,27 @@
 package local.jordi.kwetter.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class User implements IDomainObject
+@Entity
+public class User extends AbstractDomainObject implements Serializable
 {
-    //@Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
     private String name;
     private String password;
     private String biography;
     private String website;
 
+    @OneToMany
     private List<Tweet> tweets;
+
+    @ManyToMany(mappedBy = "followers")
     private Set<User> following;
+
+    @ManyToMany
     private Set<User> followers;
 
     /**
@@ -50,6 +54,10 @@ public class User implements IDomainObject
         followers = new HashSet<>();
     }
 
+    public User()
+    {
+    }
+
     /**
      * Lets this user follow the given user
      * @param user The user to follow
@@ -59,7 +67,7 @@ public class User implements IDomainObject
     {
         if (this == user || user == null)
         {
-            return false;
+            throw new IllegalArgumentException("Cannot follow yourself or null");
         }
 
         if (following.add(user))
@@ -118,18 +126,6 @@ public class User implements IDomainObject
         this.website = website;
     }
 
-    @Override
-    public long getId()
-    {
-        return id;
-    }
-
-    @Override
-    public void setId(long id)
-    {
-        this.id = id;
-    }
-
     public String getPassword()
     {
         return password;
@@ -153,7 +149,14 @@ public class User implements IDomainObject
     {
         List<Tweet> latestTweets = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++)
+        int amountOfItemsToGet = 10;
+
+        if (tweets.size() < amountOfItemsToGet)
+        {
+            amountOfItemsToGet = amountOfItemsToGet + (tweets.size() - amountOfItemsToGet);
+        }
+
+        for (int i = tweets.size() - 1; i > tweets.size() - (amountOfItemsToGet + 1); i--)
         {
             latestTweets.add(tweets.get(i));
         }

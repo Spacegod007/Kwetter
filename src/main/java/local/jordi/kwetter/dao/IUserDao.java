@@ -4,4 +4,5 @@ import local.jordi.kwetter.domain.User;
 
 public interface IUserDao extends IDao<User>
 {
+    boolean userWithNameExists(String name);
 }

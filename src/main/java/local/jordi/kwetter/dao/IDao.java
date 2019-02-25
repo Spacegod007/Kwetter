@@ -1,6 +1,8 @@
 package local.jordi.kwetter.dao;
 
-public interface IDao <T>
+import local.jordi.kwetter.domain.AbstractDomainObject;
+
+public interface IDao <T extends AbstractDomainObject>
 {
     T Create(T t);
     T Get(long id);

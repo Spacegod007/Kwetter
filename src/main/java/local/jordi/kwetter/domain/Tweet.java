@@ -1,25 +1,27 @@
 package local.jordi.kwetter.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Tweet implements IDomainObject
+@Entity
+public class Tweet extends AbstractDomainObject implements Serializable
 {
-    //@Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+//    @OneToMany(targetEntity = Tweet.class, mappedBy = "reactions")
+    @ManyToOne
+    private Tweet responseToTweet;
 
-    private long responseToId;
-
+//    @ManyToOne(targetEntity = List.class)
+    @OneToMany
     private List<Tweet> reactions;
 
+    @ManyToOne
     private User author;
 
     private String text;
     private Date date;
-
-
 
     /**
      * Constructs the object
@@ -30,7 +32,7 @@ public class Tweet implements IDomainObject
     {
         setText(text);
         setAuthor(author);
-        this.responseToId = Long.MIN_VALUE;
+        this.responseToTweet = null;
 
         date = new Date();
         reactions = new ArrayList<>();
@@ -40,37 +42,32 @@ public class Tweet implements IDomainObject
      * Constructs the object
      * @param text The text of the tweet
      * @param author The author of the tweet
-     * @param responseToId The tweet/reaction this tweet is a reaction to
+     * @param responseToTweet The tweet/reaction this tweet is a reaction to
      */
-    public Tweet(String text, User author, long responseToId)
+    public Tweet(String text, User author, Tweet responseToTweet)
     {
         this(text, author);
-        setResponseToId(responseToId);
+        setResponseToTweet(responseToTweet);
     }
 
-    public long getId()
+    public Tweet()
     {
-        return id;
-    }
 
-    public void setId(long id)
-    {
-        this.id = id;
     }
 
     public boolean isReaction()
     {
-        return responseToId != Long.MIN_VALUE;
+        return responseToTweet != null;
     }
 
-    public long getResponseToId()
+    public Tweet getRepsonseTo()
     {
-        return responseToId;
+        return responseToTweet;
     }
 
-    private void setResponseToId(long responseToId)
+    private void setResponseToTweet(Tweet responseToTweet)
     {
-        this.responseToId = responseToId;
+        this.responseToTweet = responseToTweet;
     }
 
     public String getText()
@@ -80,6 +77,11 @@ public class Tweet implements IDomainObject
 
     public void setText(String text)
     {
+        if (text.length() > 140)
+        {
+            throw new IllegalArgumentException("The tweet text is too long, maximum length is 140 characters");
+        }
+
         this.text = text;
     }
 
