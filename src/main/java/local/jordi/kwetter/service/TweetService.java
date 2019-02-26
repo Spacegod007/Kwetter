@@ -19,8 +19,8 @@ public class TweetService
 
     public void SendReaction(Tweet tweet, Tweet reaction)
     {
+        Tweet obtainedTweet = GetManagedTweet(tweet);
         Tweet createdReaction = tweetDao.Create(reaction);
-        Tweet obtainedTweet = GetTweet(tweet);
 
         if (obtainedTweet != null)
         {
@@ -32,7 +32,17 @@ public class TweetService
         }
     }
 
-    public Tweet GetTweet(Tweet tweet)
+    public Tweet GetTweet(long id)
+    {
+        return tweetDao.Get(id);
+    }
+
+    public void DeleteTweet(Tweet tweet)
+    {
+        tweetDao.Delete(tweet);
+    }
+
+    private Tweet GetManagedTweet(Tweet tweet)
     {
         Tweet obtainedTweet = tweetDao.Get(tweet.getId());
         if (obtainedTweet != null)

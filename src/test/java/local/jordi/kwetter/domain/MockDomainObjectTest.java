@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 public class MockDomainObjectTest
 {
     @Test
-    public void Test()
+    public void setAndGetIdTest()
     {
         long SET_ID = 42;
 

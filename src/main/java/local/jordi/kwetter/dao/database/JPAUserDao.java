@@ -8,10 +8,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Stateless
-public class JPAUserDao implements IUserDao
+public class JPAUserDao extends AbstractJPADao<User> implements IUserDao
 {
-    @PersistenceContext
-    private EntityManager entityManager;
+//    @PersistenceContext
+//    private EntityManager entityManager;
 
     @Override
     public boolean userWithNameExists(String name)
@@ -19,28 +19,28 @@ public class JPAUserDao implements IUserDao
         return (entityManager.find(User.class, name) != null);
     }
 
-    @Override
-    public User Create(User user)
-    {
-        entityManager.persist(user);
-        return user;
-    }
-
-    @Override
-    public User Get(long id)
-    {
-        return entityManager.find(User.class, id);
-    }
-
-    @Override
-    public User Update(User user)
-    {
-        return entityManager.merge(user);
-    }
-
-    @Override
-    public void Delete(User user)
-    {
-        entityManager.remove(user);
-    }
+//    @Override
+//    public User Create(User user)
+//    {
+//        entityManager.persist(user);
+//        return user;
+//    }
+//
+//    @Override
+//    public User Get(long id)
+//    {
+//        return entityManager.find(User.class, id);
+//    }
+//
+//    @Override
+//    public User Update(User user)
+//    {
+//        return entityManager.merge(user);
+//    }
+//
+//    @Override
+//    public void Delete(User user)
+//    {
+//        entityManager.remove(user);
+//    }
 }

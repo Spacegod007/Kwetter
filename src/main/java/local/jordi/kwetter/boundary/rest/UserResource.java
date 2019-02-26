@@ -5,11 +5,7 @@ import local.jordi.kwetter.service.UserService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PUT;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 
 @Stateless
 @Path("users")
@@ -18,18 +14,23 @@ public class UserResource
     @Inject
     private UserService userService;
 
-//    @GET
-//    @Path("{id}")
-//    public User getUser(@PathParam("id") long id)
-//    {
-//        return userService.GetUser(id);
-//    }
-
     @GET
     @Path("{id}")
-    public User userTest(@PathParam("id") long id)
+    public User getUser(@PathParam("id") long id)
     {
-        return new User("Jordi", "Bio", "WEB");
+        return userService.GetUser(id);
+    }
+
+    @GET
+    @Path("test")
+    public User userTest()
+    {
+        User user = new User("Jordi", "Bio", "WEB");
+        User followedUser = new User("followed by Jordi", "bio", "web");
+        User followingUser = new User("follows Jordi", "bio", "web");
+        user.follow(followedUser);
+        followingUser.follow(user);
+        return user;
     }
 
     @POST
@@ -38,15 +39,34 @@ public class UserResource
         return userService.CreateUser(user);
     }
 
-//    @PUT
-    public boolean FollowUser(User user, User followUser)
+    @POST
+    @Path("update")
+    public User updateUser(User user)
     {
+        return userService.UpdateUser(user);
+    }
+
+    @PUT
+    @Path("follow/{id}")
+    public boolean FollowUser(@PathParam("id") long id, User user)
+    {
+        User followUser = userService.GetUser(id);
         return userService.Follow(user, followUser);
     }
 
-//    @PUT
-    public void UnFollowUser(User user, User followedUser)
+    @PUT
+    @Path("unfollow/{id}")
+    public void UnFollowUser(@PathParam("id") long id, User user)
     {
+        User followedUser = userService.GetUser(id);
         userService.UnFollow(user, followedUser);
+    }
+
+    @DELETE
+    @Path("{id}")
+    public void removeUser(@PathParam("id") long id)
+    {
+        User user = userService.GetUser(id);
+        userService.removeUser(user);
     }
 }

@@ -7,8 +7,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-public class Tweet extends AbstractDomainObject implements Serializable
+public class Tweet implements Serializable, IDomainObject
 {
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    protected long id;
+
 //    @OneToMany(targetEntity = Tweet.class, mappedBy = "reactions")
     @ManyToOne
     private Tweet responseToTweet;
@@ -27,6 +30,18 @@ public class Tweet extends AbstractDomainObject implements Serializable
      * Constructs the object
      * @param text The text of the tweet
      * @param author The author of the tweet
+     * @param responseToTweet The tweet/reaction this tweet is a reaction to
+     */
+    public Tweet(String text, User author, Tweet responseToTweet)
+    {
+        this(text, author);
+        setResponseToTweet(responseToTweet);
+    }
+
+    /**
+     * Constructs the object
+     * @param text The text of the tweet
+     * @param author The author of the tweet
      */
     public Tweet(String text, User author)
     {
@@ -36,18 +51,6 @@ public class Tweet extends AbstractDomainObject implements Serializable
 
         date = new Date();
         reactions = new ArrayList<>();
-    }
-
-    /**
-     * Constructs the object
-     * @param text The text of the tweet
-     * @param author The author of the tweet
-     * @param responseToTweet The tweet/reaction this tweet is a reaction to
-     */
-    public Tweet(String text, User author, Tweet responseToTweet)
-    {
-        this(text, author);
-        setResponseToTweet(responseToTweet);
     }
 
     public Tweet()
@@ -122,5 +125,17 @@ public class Tweet extends AbstractDomainObject implements Serializable
     public void removeReaction(Tweet tweet)
     {
         reactions.remove(tweet);
+    }
+
+    @Override
+    public void setId(long id)
+    {
+        this.id = id;
+    }
+
+    @Override
+    public long getId()
+    {
+        return id;
     }
 }

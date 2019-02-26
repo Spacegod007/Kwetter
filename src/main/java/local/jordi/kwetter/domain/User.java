@@ -8,21 +8,16 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-public class User extends AbstractDomainObject implements Serializable
+public class User extends UserInformation implements Serializable
 {
-    private String name;
-    private String password;
-    private String biography;
-    private String website;
-
     @OneToMany
     private List<Tweet> tweets;
 
-    @ManyToMany(mappedBy = "followers")
-    private Set<User> following;
+    @ManyToMany(targetEntity = User.class, mappedBy = "followers")
+    private Set<UserInformation> following;
 
-    @ManyToMany
-    private Set<User> followers;
+    @ManyToMany(targetEntity = User.class)
+    private Set<UserInformation> followers;
 
     /**
      * Constructs the object
@@ -33,8 +28,11 @@ public class User extends AbstractDomainObject implements Serializable
      */
     public User(String name, String password, String biography, String website)
     {
-        this(name, biography, website);
-        setPassword(password);
+        super(name, password, biography, website);
+
+        tweets = new ArrayList<>();
+        following = new HashSet<>();
+        followers = new HashSet<>();
     }
 
     /**
@@ -45,9 +43,7 @@ public class User extends AbstractDomainObject implements Serializable
      */
     public User(String name, String biography, String website)
     {
-        setName(name);
-        setBiography(biography);
-        setWebsite(website);
+        super(name, biography, website);
 
         tweets = new ArrayList<>();
         following = new HashSet<>();
@@ -92,54 +88,6 @@ public class User extends AbstractDomainObject implements Serializable
         user.followers.remove(this);
     }
 
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        if (name == null || name.isEmpty())
-        {
-            throw new IllegalArgumentException("name cannot be null or empty");
-        }
-        this.name = name;
-    }
-
-    public String getBiography()
-    {
-        return biography;
-    }
-
-    public void setBiography(String biography)
-    {
-        this.biography = biography;
-    }
-
-    public String getWebsite()
-    {
-        return website;
-    }
-
-    public void setWebsite(String website)
-    {
-        this.website = website;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword(String password)
-    {
-        if (password == null || password.isEmpty())
-        {
-            throw new IllegalArgumentException("password cannot be null or empty");
-        }
-        this.password = password;
-    }
-
     public List<Tweet> getTweets()
     {
         return tweets;
@@ -174,13 +122,13 @@ public class User extends AbstractDomainObject implements Serializable
         tweets.remove(tweet);
     }
 
-    public Set<User> getFollowing()
+    public Set<UserInformation> getFollowing()
     {
-        return following;
+        return new HashSet<>(following);
     }
 
-    public Set<User> getFollowers()
+    public Set<UserInformation> getFollowers()
     {
-        return followers;
+        return new HashSet<>(followers);
     }
 }

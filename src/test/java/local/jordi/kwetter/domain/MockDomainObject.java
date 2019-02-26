@@ -1,6 +1,6 @@
 package local.jordi.kwetter.domain;
 
-public class MockDomainObject extends AbstractDomainObject
+public class MockDomainObject implements IDomainObject
 {
     private long id;
 

@@ -78,4 +78,9 @@ public class UserService
     {
         return userDao.Get(id);
     }
+
+    public void removeUser(User user)
+    {
+        userDao.Delete(user);
+    }
 }
