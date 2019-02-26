@@ -52,8 +52,21 @@ public class UserServiceIntegrationTest
         User managedUser = userService.CreateUser(user);
 
         long id = managedUser.getId();
+        User obtainedUser = userService.GetUser(id);
 
         Assert.assertEquals("The id was not set correctly while creating the user", expectedId, id);
+        Assert.assertNotNull("The user found with the id was null while it should've contained the created user", obtainedUser);
+    }
+
+    @Test
+    public void GetUserTest()
+    {
+        User managedUser = userService.CreateUser(UserServiceIntegrationTest.user);
+        long id = managedUser.getId();
+
+        User obtainedUser = userService.GetUser(id);
+
+        Assert.assertEquals("The obtained user is not the same as the created user", managedUser, obtainedUser);
     }
 
     @Test
