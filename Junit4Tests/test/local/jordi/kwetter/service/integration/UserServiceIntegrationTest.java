@@ -57,6 +57,22 @@ public class UserServiceIntegrationTest
     }
 
     @Test
+    public void UpdateUserTest()
+    {
+        String updatedName = "updated name";
+        User createdUser = userService.CreateUser(user);
+        long id = createdUser.getId();
+        createdUser.setName(updatedName);
+
+        User updatedUser = userService.UpdateUser(user);
+
+        User obtainedUserAfterUpdate = userService.GetUser(id);
+
+        Assert.assertEquals("While updating the user, the id should not have changed, however it did", id, updatedUser.getId());
+        Assert.assertEquals("The name of the user was not updated while this was changed before calling the update method", updatedName, updatedUser.getName());
+    }
+
+    @Test
     public void RemoveUserTest()
     {
         User createduser = userService.CreateUser(user);

@@ -1,11 +1,9 @@
-package local.jordi.kwetter.dao.database;
+package local.jordi.kwetter.dao.jpa;
 
 import local.jordi.kwetter.dao.ITweetDao;
 import local.jordi.kwetter.domain.Tweet;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 @Stateless
 public class JPATweetDao extends AbstractJPADao<Tweet> implements ITweetDao

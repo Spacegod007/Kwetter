@@ -1,11 +1,9 @@
-package local.jordi.kwetter.dao.database;
+package local.jordi.kwetter.dao.jpa;
 
 import local.jordi.kwetter.dao.IUserDao;
 import local.jordi.kwetter.domain.User;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 @Stateless
 public class JPAUserDao extends AbstractJPADao<User> implements IUserDao

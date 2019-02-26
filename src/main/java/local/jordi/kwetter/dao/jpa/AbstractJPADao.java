@@ -1,9 +1,8 @@
-package local.jordi.kwetter.dao.database;
+package local.jordi.kwetter.dao.jpa;
 
 import local.jordi.kwetter.dao.IDao;
 import local.jordi.kwetter.domain.IDomainObject;
 
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.lang.reflect.ParameterizedType;
