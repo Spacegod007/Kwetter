@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class UserInformation implements IDomainObject, Serializable
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
     protected String name;

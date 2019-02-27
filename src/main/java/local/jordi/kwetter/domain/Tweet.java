@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 public class Tweet implements Serializable, IDomainObject
 {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
 //    @OneToMany(targetEntity = Tweet.class, mappedBy = "reactions")
