@@ -7,49 +7,68 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 @Stateless
-public class TweetService
+public class TweetService implements ITweetService
 {
+    @Inject
+    private IUserService userService;
+
     @Inject
     private ITweetDao tweetDao;
 
-    public Tweet UpdateTweet(Tweet tweet)
+    public TweetService()
+    {
+
+    }
+
+    @Override
+    public Tweet Get(long id)
+    {
+        Tweet tweet = tweetDao.Get(id);
+
+        if (tweet != null)
+        {
+            return tweet;
+        }
+
+        throw new IllegalArgumentException("Invalid tweet id was supplied");
+    }
+
+    @Override
+    public Tweet Get(Tweet tweet)
+    {
+        return Get(tweet.getId());
+    }
+
+    @Override
+    public Tweet Create(Tweet tweet)
+    {
+        return tweetDao.Create(tweet);
+    }
+
+    @Override
+    public Tweet Update(Tweet tweet)
     {
         return tweetDao.Update(tweet);
     }
 
-    public void SendReaction(Tweet tweet, Tweet reaction)
-    {
-        Tweet obtainedTweet = GetManagedTweet(tweet);
-        Tweet createdReaction = tweetDao.Create(reaction);
-
-        if (obtainedTweet != null)
-        {
-            obtainedTweet.addReaction(createdReaction);
-        }
-        else
-        {
-            throw new IllegalArgumentException("Something went wrong while creating a reaction");
-        }
-    }
-
-    public Tweet GetTweet(long id)
-    {
-        return tweetDao.Get(id);
-    }
-
-    public void DeleteTweet(Tweet tweet)
+    @Override
+    public void Remove(Tweet tweet)
     {
         tweetDao.Delete(tweet);
     }
 
-    private Tweet GetManagedTweet(Tweet tweet)
+    @Override
+    public void SendTweet(Tweet tweet)
     {
-        Tweet obtainedTweet = tweetDao.Get(tweet.getId());
-        if (obtainedTweet != null)
-        {
-            return obtainedTweet;
-        }
+        Create(tweet);
+    }
 
-        throw new IllegalArgumentException("Invalid tweetId was supplied");
+    @Override
+    public void SendReaction(Tweet tweet, Tweet reaction)
+    {
+        Tweet obtainedTweet = Get(tweet);
+        Tweet createdReaction = tweetDao.Create(reaction);
+
+        obtainedTweet.addReaction(createdReaction);
     }
 }

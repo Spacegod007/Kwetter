@@ -128,8 +128,8 @@ public class UserTest
     public void ValidFollowUser()
     {
         boolean expectedTrueResult = testUser1.follow(testUser2);
-        Set<UserInformation> user1Following = testUser1.getFollowing();
-        Set<UserInformation> user2Followers = testUser2.getFollowers();
+        Set<User> user1Following = testUser1.getFollowing();
+        Set<User> user2Followers = testUser2.getFollowers();
 
         Assertions.assertTrue(expectedTrueResult, "User1 should now follow User2 but the method returned false");
 
@@ -148,8 +148,8 @@ public class UserTest
     public void InvalidFollowUser()
     {
         Assertions.assertThrows(IllegalArgumentException.class, () -> testUser1.follow(testUser1), "User should not be able to follow him/herself");
-        Set<UserInformation> user1Following = testUser1.getFollowing();
-        Set<UserInformation> user1Followers = testUser1.getFollowers();
+        Set<User> user1Following = testUser1.getFollowing();
+        Set<User> user1Followers = testUser1.getFollowers();
 
         if (user1Following.contains(testUser1))
         {
@@ -166,8 +166,8 @@ public class UserTest
     public void InvalidFollowUser2()
     {
         Assertions.assertThrows(IllegalArgumentException.class, () -> testUser1.follow(null), "User should not be able to follow null");
-        Set<UserInformation> user1Following = testUser1.getFollowing();
-        Set<UserInformation> user1Followers = testUser1.getFollowers();
+        Set<User> user1Following = testUser1.getFollowing();
+        Set<User> user1Followers = testUser1.getFollowers();
 
         if (user1Following.contains(testUser1))
         {
@@ -186,8 +186,8 @@ public class UserTest
         testUser1.follow(testUser2);
         testUser1.unFollow(testUser2);
 
-        Set<UserInformation> user1Following = testUser1.getFollowing();
-        Set<UserInformation> user2Followers = testUser2.getFollowers();
+        Set<User> user1Following = testUser1.getFollowing();
+        Set<User> user2Followers = testUser2.getFollowers();
 
         if (user1Following.contains(testUser2))
         {

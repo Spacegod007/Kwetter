@@ -2,7 +2,7 @@ package local.jordi.kwetter.boundary.rest;
 
 import local.jordi.kwetter.domain.Tweet;
 import local.jordi.kwetter.domain.User;
-import local.jordi.kwetter.service.TweetService;
+import local.jordi.kwetter.service.ITweetService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -13,7 +13,7 @@ import javax.ws.rs.*;
 public class TweetResource
 {
     @Inject
-    private TweetService tweetService;
+    private ITweetService tweetService;
 
     @GET
     public Tweet tweetTest()
@@ -25,14 +25,14 @@ public class TweetResource
     @Path("{id}")
     public Tweet getTweet(@PathParam("id") long id)
     {
-        return tweetService.GetTweet(id);
+        return tweetService.Get(id);
     }
 
     @PUT
     @Path("reaction/{id}")
     public void sendReaction(@PathParam("id") long id, Tweet reaction)
     {
-        Tweet tweet = tweetService.GetTweet(id);
+        Tweet tweet = tweetService.Get(id);
         tweetService.SendReaction(tweet, reaction);
     }
 
@@ -40,7 +40,7 @@ public class TweetResource
     @Path("{id}")
     public void deleteTweet(@PathParam("id") long id)
     {
-        Tweet tweet = tweetService.GetTweet(id);
-        tweetService.DeleteTweet(tweet);
+        Tweet tweet = tweetService.Get(id);
+        tweetService.Remove(tweet);
     }
 }

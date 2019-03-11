@@ -85,7 +85,7 @@ public class UserServiceTest
         when(userDao.userWithNameExists(username)).thenReturn(false);
         when(userDao.Create(user)).thenReturn(managedUser);
 
-        User createdUser = userService.CreateUser(user);
+        User createdUser = userService.Create(user);
 
         Assert.assertEquals(1, createdUser.getId());
     }
@@ -113,21 +113,6 @@ public class UserServiceTest
 
         Assert.assertFalse("User is following user2 while the unfollow method succeeded", isUserFollowingUser2);
         Assert.assertFalse("User2 has user as follower while user is not following user2", doesUser2HaveUserAsFollower);
-    }
-
-    @Test
-    public void UserSendTweet()
-    {
-        Tweet tweet = new Tweet(testTweetText, managedUser);
-        Tweet managedTweet = new Tweet(testTweetText, managedUser);
-        managedTweet.setId(101);
-        when(tweetDao.Create(tweet)).thenReturn(managedTweet);
-
-        userService.SendTweet(managedUser, tweet);
-
-        boolean userHasSendTweet = managedUser.getTweets().contains(managedTweet);
-
-        Assert.assertTrue("User does not have the tweet which he just send", userHasSendTweet);
     }
 
     @Test

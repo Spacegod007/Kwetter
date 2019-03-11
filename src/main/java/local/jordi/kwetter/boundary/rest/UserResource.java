@@ -1,28 +1,30 @@
 package local.jordi.kwetter.boundary.rest;
 
 import local.jordi.kwetter.domain.User;
-import local.jordi.kwetter.service.UserService;
+import local.jordi.kwetter.service.IUserService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 
 @Stateless
 @Path("users")
 public class UserResource
 {
     @Inject
-    private UserService userService;
+    private IUserService userService;
 
     @GET
     @Path("{id}")
     public User getUser(@PathParam("id") long id)
     {
-        return userService.GetUser(id);
+        return userService.Get(id);
     }
 
     @GET
     @Path("test")
+    @Produces({MediaType.APPLICATION_JSON})
     public User userTest()
     {
         User user = new User("Jordi", "Bio", "WEB");
@@ -36,21 +38,21 @@ public class UserResource
     @POST
     public User registerUser(User user)
     {
-        return userService.CreateUser(user);
+        return userService.Create(user);
     }
 
     @POST
     @Path("update")
     public User updateUser(User user)
     {
-        return userService.UpdateUser(user);
+        return userService.Update(user);
     }
 
     @PUT
     @Path("follow/{id}")
     public boolean FollowUser(@PathParam("id") long id, User user)
     {
-        User followUser = userService.GetUser(id);
+        User followUser = userService.Get(id);
         return userService.Follow(user, followUser);
     }
 
@@ -58,7 +60,7 @@ public class UserResource
     @Path("unfollow/{id}")
     public void UnFollowUser(@PathParam("id") long id, User user)
     {
-        User followedUser = userService.GetUser(id);
+        User followedUser = userService.Get(id);
         userService.UnFollow(user, followedUser);
     }
 
@@ -66,7 +68,7 @@ public class UserResource
     @Path("{id}")
     public void removeUser(@PathParam("id") long id)
     {
-        User user = userService.GetUser(id);
-        userService.removeUser(user);
+        User user = userService.Get(id);
+        userService.Remove(user);
     }
 }

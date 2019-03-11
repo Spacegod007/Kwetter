@@ -1,6 +1,5 @@
 package local.jordi.kwetter.service;
 
-import local.jordi.kwetter.dao.ITweetDao;
 import local.jordi.kwetter.dao.IUserDao;
 import local.jordi.kwetter.domain.Tweet;
 import local.jordi.kwetter.domain.User;
@@ -10,15 +9,36 @@ import javax.inject.Inject;
 import java.util.List;
 
 @Stateless
-public class UserService
+public class UserService implements IUserService
 {
     @Inject
     private IUserDao userDao;
 
-    @Inject
-    private ITweetDao tweetDao;
+    public UserService()
+    {
+    }
 
-    public User CreateUser(User user)
+    @Override
+    public User Get(long id)
+    {
+        User user = userDao.Get(id);
+
+        if (user != null)
+        {
+            return user;
+        }
+
+        throw new IllegalArgumentException("Invalid user id was supplied");
+    }
+
+    @Override
+    public User Get(User user)
+    {
+        return Get(user.getId());
+    }
+
+    @Override
+    public User Create(User user)
     {
         if (!userDao.userWithNameExists(user.getName()))
         {
@@ -28,59 +48,40 @@ public class UserService
         throw new IllegalArgumentException("A user with that username already exists");
     }
 
-    public User UpdateUser(User user)
+    @Override
+    public User Update(User user)
     {
         return userDao.Update(user);
     }
 
-    public void SendTweet(User user, Tweet tweet)
+    @Override
+    public void Remove(User user)
     {
-        Tweet createdTweet = tweetDao.Create(tweet);
-        User managedUser = GetManagedUser(user);
-        managedUser.addTweet(createdTweet);
+        userDao.Delete(user);
     }
 
+    @Override
     public List<Tweet> Get10LatestTweets(User user)
     {
-        User managedUser = GetManagedUser(user);
+        User managedUser = Get(user);
         return managedUser.getLatest10Tweets();
     }
 
+    @Override
     public boolean Follow(User user, User followUser)
     {
-        User managedUser = GetManagedUser(user);
-        User managedFollowUser = GetManagedUser(followUser);
+        User managedUser = Get(user);
+        User managedFollowUser = Get(followUser);
 
         return managedUser.follow(managedFollowUser);
     }
 
+    @Override
     public void UnFollow(User user, User followedUser)
     {
-        User managedUser = GetManagedUser(user);
-        User managedFollowedUser = GetManagedUser(followedUser);
+        User managedUser = Get(user);
+        User managedFollowedUser = Get(followedUser);
 
         managedUser.unFollow(managedFollowedUser);
-    }
-
-    private User GetManagedUser(User user)
-    {
-        User obtainedUser = userDao.Get(user.getId());
-
-        if (obtainedUser != null)
-        {
-            return obtainedUser;
-        }
-
-        throw new IllegalArgumentException("Invalid user");
-    }
-
-    public User GetUser(long id)
-    {
-        return userDao.Get(id);
-    }
-
-    public void removeUser(User user)
-    {
-        userDao.Delete(user);
     }
 }

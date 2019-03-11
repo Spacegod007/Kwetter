@@ -1,5 +1,6 @@
 package local.jordi.kwetter.domain;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,16 +9,28 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-public class User extends UserInformation implements Serializable
+public class User implements IDomainObject, Serializable
 {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    private String name;
+    private String password;
+    private String biography;
+    private String website;
+
     @OneToMany
+    @JsonbTransient
     private List<Tweet> tweets;
 
     @ManyToMany(targetEntity = User.class, mappedBy = "followers")
-    private Set<UserInformation> following;
+    @JsonbTransient
+    private Set<User> following;
 
     @ManyToMany(targetEntity = User.class)
-    private Set<UserInformation> followers;
+    @JsonbTransient
+    private Set<User> followers;
 
     /**
      * Constructs the object
@@ -28,11 +41,9 @@ public class User extends UserInformation implements Serializable
      */
     public User(String name, String password, String biography, String website)
     {
-        super(name, password, biography, website);
+        this(name, biography, website);
 
-        tweets = new ArrayList<>();
-        following = new HashSet<>();
-        followers = new HashSet<>();
+        setPassword(password);
     }
 
     /**
@@ -43,7 +54,9 @@ public class User extends UserInformation implements Serializable
      */
     public User(String name, String biography, String website)
     {
-        super(name, biography, website);
+        setName(name);
+        setBiography(biography);
+        setWebsite(website);
 
         tweets = new ArrayList<>();
         following = new HashSet<>();
@@ -52,6 +65,54 @@ public class User extends UserInformation implements Serializable
 
     public User()
     {
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        if (name == null || name.isEmpty())
+        {
+            throw new IllegalArgumentException("name cannot be null or empty");
+        }
+        this.name = name;
+    }
+
+    public String getPassword()
+    {
+        return password;
+    }
+
+    public void setPassword(String password)
+    {
+        if (password == null || password.isEmpty())
+        {
+            throw new IllegalArgumentException("password cannot be null or empty");
+        }
+        this.password = password;
+    }
+
+    public String getBiography()
+    {
+        return biography;
+    }
+
+    public void setBiography(String biography)
+    {
+        this.biography = biography;
+    }
+
+    public String getWebsite()
+    {
+        return website;
+    }
+
+    public void setWebsite(String website)
+    {
+        this.website = website;
     }
 
     /**
@@ -122,13 +183,25 @@ public class User extends UserInformation implements Serializable
         tweets.remove(tweet);
     }
 
-    public Set<UserInformation> getFollowing()
+    public Set<User> getFollowing()
     {
-        return new HashSet<>(following);
+        return following;
     }
 
-    public Set<UserInformation> getFollowers()
+    public Set<User> getFollowers()
     {
-        return new HashSet<>(followers);
+        return followers;
+    }
+
+    @Override
+    public long getId()
+    {
+        return id;
+    }
+
+    @Override
+    public void setId(long id)
+    {
+        this.id = id;
     }
 }
