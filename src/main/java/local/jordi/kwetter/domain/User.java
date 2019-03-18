@@ -20,15 +20,15 @@ public class User implements IDomainObject, Serializable
     private String biography;
     private String website;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE)
     @JsonbTransient
     private List<Tweet> tweets;
 
-    @ManyToMany(targetEntity = User.class, mappedBy = "followers")
+    @ManyToMany(mappedBy = "followers")
     @JsonbTransient
     private Set<User> following;
 
-    @ManyToMany(targetEntity = User.class)
+    @ManyToMany
     @JsonbTransient
     private Set<User> followers;
 

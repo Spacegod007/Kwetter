@@ -13,11 +13,11 @@ public class Tweet implements Serializable, IDomainObject
     protected long id;
 
 //    @OneToMany(targetEntity = Tweet.class, mappedBy = "reactions")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     private Tweet responseToTweet;
 
 //    @ManyToOne(targetEntity = List.class)
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH})
     private List<Tweet> reactions;
 
     @ManyToOne
