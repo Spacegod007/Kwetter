@@ -42,9 +42,6 @@ public class UserServiceTest
     @Mock
     private IUserDao userDao;
 
-    @Mock
-    private ITweetDao tweetDao;
-
     @InjectMocks
     private UserService userService;
 

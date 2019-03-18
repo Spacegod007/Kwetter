@@ -1,8 +1,6 @@
 package local.jordi.kwetter.service.integration;
 
-import local.jordi.kwetter.dao.ITweetDao;
 import local.jordi.kwetter.dao.IUserDao;
-import local.jordi.kwetter.dao.collection.CollectionTweetDao;
 import local.jordi.kwetter.dao.collection.CollectionUserDao;
 import local.jordi.kwetter.domain.User;
 import local.jordi.kwetter.service.UserService;
@@ -26,9 +24,6 @@ public class UserServiceIntegrationTest
 
     @Spy
     private IUserDao userDao = new CollectionUserDao();
-
-    @Spy
-    private ITweetDao tweetDao = new CollectionTweetDao();
 
     @InjectMocks
     private UserService userService;
