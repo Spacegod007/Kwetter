@@ -7,6 +7,7 @@ import local.jordi.kwetter.service.ITweetService;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 
 @Stateless
 @Path("tweets")
@@ -16,31 +17,35 @@ public class TweetResource
     private ITweetService tweetService;
 
     @GET
-    public Tweet tweetTest()
+    @Path("{id}")
+    public Response getTweet(@PathParam("id") long id)
     {
-        return new Tweet("T", new User("a", "b", "c", "d"));
+        Tweet result = tweetService.Get(id);
+        return ResourceHelper.GenerateResponse(result);
     }
 
-    @GET
-    @Path("{id}")
-    public Tweet getTweet(@PathParam("id") long id)
+    @POST
+    public Response sendTweet(Tweet tweet)
     {
-        return tweetService.Get(id);
+        tweetService.SendTweet(tweet);
+        return ResourceHelper.GenerateResponse();
     }
 
     @PUT
-    @Path("reaction/{id}")
-    public void sendReaction(@PathParam("id") long id, Tweet reaction)
+    @Path("{id}/reaction")
+    public Response sendReaction(@PathParam("id") long id, Tweet reaction)
     {
         Tweet tweet = tweetService.Get(id);
         tweetService.SendReaction(tweet, reaction);
+        return ResourceHelper.GenerateResponse();
     }
 
     @DELETE
     @Path("{id}")
-    public void deleteTweet(@PathParam("id") long id)
+    public Response deleteTweet(@PathParam("id") long id)
     {
         Tweet tweet = tweetService.Get(id);
         tweetService.Remove(tweet);
+        return ResourceHelper.GenerateResponse();
     }
 }

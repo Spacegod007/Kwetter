@@ -6,7 +6,7 @@ import local.jordi.kwetter.service.IUserService;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Stateless
 @Path("users")
@@ -17,58 +17,57 @@ public class UserResource
 
     @GET
     @Path("{id}")
-    public User getUser(@PathParam("id") long id)
+    public Response getUser(@PathParam("id") long id)
     {
-        return userService.Get(id);
-    }
-
-    @GET
-    @Path("test")
-    @Produces({MediaType.APPLICATION_JSON})
-    public User userTest()
-    {
-        User user = new User("Jordi", "Bio", "WEB");
-        User followedUser = new User("followed by Jordi", "bio", "web");
-        User followingUser = new User("follows Jordi", "bio", "web");
-        user.follow(followedUser);
-        followingUser.follow(user);
-        return user;
+        User result = userService.Get(id);
+        return ResourceHelper.GenerateResponse(result);
     }
 
     @POST
-    public User registerUser(User user)
+    public Response registerUser(User user)
     {
-        return userService.Create(user);
-    }
-
-    @POST
-    @Path("update")
-    public User updateUser(User user)
-    {
-        return userService.Update(user);
+        User result = userService.Create(user);
+        return ResourceHelper.GenerateResponse(result);
     }
 
     @PUT
-    @Path("follow/{id}")
-    public boolean FollowUser(@PathParam("id") long id, User user)
+    @Path("{id}")
+    public Response updateUser(@PathParam("id") long id, User user)
     {
-        User followUser = userService.Get(id);
-        return userService.Follow(user, followUser);
+        User result = userService.Update(user);
+        return ResourceHelper.GenerateResponse(result);
     }
 
     @PUT
-    @Path("unfollow/{id}")
-    public void UnFollowUser(@PathParam("id") long id, User user)
+    @Path("{id}/follow/{followId}")
+    public Response followUser(@PathParam("id") long id, @PathParam("followId") long followId)
     {
-        User followedUser = userService.Get(id);
+        User user = userService.Get(id);
+        User followUser = userService.Get(followId);
+
+        boolean operationSucceeded = userService.Follow(user, followUser);
+
+        return ResourceHelper.GenerateResponse(operationSucceeded);
+    }
+
+    @PUT
+    @Path("{id}/unfollow/{followId}")
+    public Response unFollowUser(@PathParam("id") long id, @PathParam("followId") long followId)
+    {
+        User user = userService.Get(id);
+        User followedUser = userService.Get(followId);
+
         userService.UnFollow(user, followedUser);
+
+        return ResourceHelper.GenerateResponse();
     }
 
     @DELETE
     @Path("{id}")
-    public void removeUser(@PathParam("id") long id)
+    public Response removeUser(@PathParam("id") long id)
     {
         User user = userService.Get(id);
         userService.Remove(user);
+        return ResourceHelper.GenerateResponse();
     }
 }
