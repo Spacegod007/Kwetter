@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@NamedQueries(
+        @NamedQuery(name = "User.getUserByName", query = "SELECT COUNT(u) FROM User AS u WHERE u.name = :name")
+)
 public class User implements IDomainObject, Serializable
 {
     @Id

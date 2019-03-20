@@ -4,41 +4,16 @@ import local.jordi.kwetter.dao.IUserDao;
 import local.jordi.kwetter.domain.User;
 
 import javax.ejb.Stateless;
+import javax.persistence.Query;
 
 @Stateless
 public class JPAUserDao extends AbstractJPADao<User> implements IUserDao
 {
-//    @PersistenceContext
-//    private EntityManager entityManager;
-
     @Override
     public boolean userWithNameExists(String name)
     {
-        return (entityManager.find(User.class, name) != null);
+        Query namedQuery = entityManager.createNamedQuery("User.getUserByName");
+        namedQuery.setParameter("name", name);
+        return (long) namedQuery.getSingleResult() > 0;
     }
-
-//    @Override
-//    public User Create(User user)
-//    {
-//        entityManager.persist(user);
-//        return user;
-//    }
-//
-//    @Override
-//    public User Get(long id)
-//    {
-//        return entityManager.find(User.class, id);
-//    }
-//
-//    @Override
-//    public User Update(User user)
-//    {
-//        return entityManager.merge(user);
-//    }
-//
-//    @Override
-//    public void Delete(User user)
-//    {
-//        entityManager.remove(user);
-//    }
 }

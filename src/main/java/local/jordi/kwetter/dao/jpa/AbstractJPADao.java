@@ -30,6 +30,11 @@ public abstract class AbstractJPADao <T extends IDomainObject> implements IDao<T
     @Override
     public T Get(long id)
     {
+        if (id < 1)
+        {
+            throw new IllegalArgumentException("Id is always at least 1");
+        }
+
         return entityManager.find(entityclass, id);
     }
 

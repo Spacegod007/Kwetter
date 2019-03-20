@@ -8,6 +8,7 @@ class ResourceHelper
     {
     }
 
+
     static Response GenerateResponse(Object object)
     {
         if (object != null)
@@ -29,5 +30,10 @@ class ResourceHelper
     static Response GenerateResponse()
     {
         return Response.ok().build();
+    }
+
+    static Response GenerateErrorResponse()
+    {
+        return Response.serverError().build();
     }
 }
