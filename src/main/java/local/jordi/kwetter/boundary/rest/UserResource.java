@@ -7,6 +7,8 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 @Stateless
 @Path("users")
@@ -16,11 +18,54 @@ public class UserResource
     private IUserService userService;
 
     @GET
+    public Response getAllUsers()
+    {
+        List<User> users = new ArrayList<>();
+        for(int i = 1; i < 5; i++)
+        {
+            users.add(userService.Get(i));
+        }
+        return ResourceHelper.GenerateResponse(users);
+    }
+
+    @GET
     @Path("{id}")
     public Response getUser(@PathParam("id") long id)
     {
         User result = userService.Get(id);
         return ResourceHelper.GenerateResponse(result);
+    }
+
+    @GET
+    @Path("{id}/followers")
+    public Response getUserFollowers(@PathParam("id") long id)
+    {
+        User user = userService.Get(id);
+        return ResourceHelper.GenerateResponse(user.getFollowers());
+    }
+
+    @GET
+    @Path("{id}/following")
+    public Response getUserFollowing(@PathParam("id") long id)
+    {
+        User user = userService.Get(id);
+        return ResourceHelper.GenerateResponse(user.getFollowing());
+    }
+
+    @GET
+    @Path("{id}/latesttweets")
+    public Response getLatestTweets(@PathParam("id") long id)
+    {
+        User user = userService.Get(id);
+        return ResourceHelper.GenerateResponse(user.getLatest10Tweets());
+    }
+
+    @GET
+    @Path("{id}/tweets")
+    public Response getUserTweets(@PathParam("id") long id)
+    {
+        User user = userService.Get(id);
+        return ResourceHelper.GenerateResponse(user.getTweets());
     }
 
     @POST

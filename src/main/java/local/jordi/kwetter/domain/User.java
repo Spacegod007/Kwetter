@@ -19,11 +19,13 @@ public class User implements IDomainObject, Serializable
     private long id;
 
     private String name;
-    private String password;
     private String biography;
     private String website;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @JsonbTransient
+    private String password;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)
     @JsonbTransient
     private List<Tweet> tweets;
 
@@ -157,6 +159,7 @@ public class User implements IDomainObject, Serializable
         return tweets;
     }
 
+    @JsonbTransient
     public List<Tweet> getLatest10Tweets()
     {
         List<Tweet> latestTweets = new ArrayList<>();

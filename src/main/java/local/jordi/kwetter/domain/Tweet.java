@@ -1,5 +1,6 @@
 package local.jordi.kwetter.domain;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,19 +13,19 @@ public class Tweet implements Serializable, IDomainObject
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
-//    @OneToMany(targetEntity = Tweet.class, mappedBy = "reactions")
+    private String text;
+    private Date date;
+
     @ManyToOne(cascade = CascadeType.REFRESH)
     private Tweet responseToTweet;
 
-//    @ManyToOne(targetEntity = List.class)
-    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH})
+    @OneToMany(mappedBy = "responseToTweet", cascade = {CascadeType.REMOVE, CascadeType.DETACH})
+    @JsonbTransient
     private List<Tweet> reactions;
 
     @ManyToOne
+    @JsonbTransient
     private User author;
-
-    private String text;
-    private Date date;
 
     /**
      * Constructs the object
@@ -63,6 +64,7 @@ public class Tweet implements Serializable, IDomainObject
         return responseToTweet != null;
     }
 
+    @JsonbTransient
     public Tweet getRepsonseTo()
     {
         return responseToTweet;
@@ -70,6 +72,11 @@ public class Tweet implements Serializable, IDomainObject
 
     private void setResponseToTweet(Tweet responseToTweet)
     {
+        if (responseToTweet == this)
+        {
+            throw new IllegalArgumentException("A tweet cannot be a response to itself");
+        }
+
         this.responseToTweet = responseToTweet;
     }
 

@@ -1,7 +1,6 @@
 package local.jordi.kwetter.boundary.rest;
 
 import local.jordi.kwetter.domain.Tweet;
-import local.jordi.kwetter.domain.User;
 import local.jordi.kwetter.service.ITweetService;
 
 import javax.ejb.Stateless;
@@ -24,6 +23,30 @@ public class TweetResource
         return ResourceHelper.GenerateResponse(result);
     }
 
+    @GET
+    @Path("{id}/replies")
+    public Response getTweetReactions(@PathParam("id") long id)
+    {
+        Tweet tweet = tweetService.Get(id);
+        return ResourceHelper.GenerateResponse(tweet.getReactions());
+    }
+
+    @GET
+    @Path("{id}/replyTo")
+    public Response getTweetResponseTo(@PathParam("id") long id)
+    {
+        Tweet tweet = tweetService.Get(id);
+        return ResourceHelper.GenerateResponse(tweet.getRepsonseTo());
+    }
+
+    @GET
+    @Path("{id}/author")
+    public Response getTweetAuthor(@PathParam("id") long id)
+    {
+        Tweet tweet = tweetService.Get(id);
+        return ResourceHelper.GenerateResponse(tweet.getAuthor());
+    }
+
     @POST
     public Response sendTweet(Tweet tweet)
     {
@@ -38,6 +61,14 @@ public class TweetResource
         Tweet tweet = tweetService.Get(id);
         tweetService.SendReaction(tweet, reaction);
         return ResourceHelper.GenerateResponse();
+    }
+
+    @PUT
+    @Path("{id}")
+    public Response updateTweet(@PathParam("id") long id, Tweet tweet)
+    {
+        Tweet result = tweetService.Update(tweet);
+        return ResourceHelper.GenerateResponse(result);
     }
 
     @DELETE
