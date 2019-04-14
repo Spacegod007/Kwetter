@@ -58,12 +58,6 @@ public class TweetService implements ITweetService
     }
 
     @Override
-    public void SendTweet(Tweet tweet)
-    {
-        Create(tweet);
-    }
-
-    @Override
     public void SendReaction(Tweet tweet, Tweet reaction)
     {
         Tweet obtainedTweet = Get(tweet);

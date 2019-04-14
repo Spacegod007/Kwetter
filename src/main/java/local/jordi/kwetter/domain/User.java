@@ -9,9 +9,12 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@NamedQueries(
-        @NamedQuery(name = "User.getUserByName", query = "SELECT COUNT(u) FROM User AS u WHERE u.name = :name")
-)
+@NamedQueries({
+        @NamedQuery(name = "User.getUserByName", query = "SELECT COUNT(u) FROM User AS u WHERE u.name = :name"),
+        @NamedQuery(name = "User.findByPartialName", query = "SELECT u FROM User AS u WHERE u.name LIKE CONCAT('%', :tag, '%')"),
+        @NamedQuery(name = "User.getLatestTweets", query = "SELECT t FROM Tweet AS t WHERE t.author.id = :id AND t.responseToTweet IS NULL ORDER BY t.date DESC"),
+        @NamedQuery(name = "User.getTweets", query = "SELECT t FROM Tweet  AS t WHERE t.author.id = :id AND t.responseToTweet IS NULL ORDER BY t.date DESC")
+})
 public class User implements IDomainObject, Serializable
 {
     @Id
@@ -157,26 +160,6 @@ public class User implements IDomainObject, Serializable
     public List<Tweet> getTweets()
     {
         return tweets;
-    }
-
-    @JsonbTransient
-    public List<Tweet> getLatest10Tweets()
-    {
-        List<Tweet> latestTweets = new ArrayList<>();
-
-        int amountOfItemsToGet = 10;
-
-        if (tweets.size() < amountOfItemsToGet)
-        {
-            amountOfItemsToGet = amountOfItemsToGet + (tweets.size() - amountOfItemsToGet);
-        }
-
-        for (int i = tweets.size() - 1; i > tweets.size() - (amountOfItemsToGet + 1); i--)
-        {
-            latestTweets.add(tweets.get(i));
-        }
-
-        return latestTweets;
     }
 
     public void addTweet(Tweet tweet)

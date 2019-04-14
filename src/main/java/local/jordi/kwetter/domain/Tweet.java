@@ -23,8 +23,7 @@ public class Tweet implements Serializable, IDomainObject
     @JsonbTransient
     private List<Tweet> reactions;
 
-    @ManyToOne
-    @JsonbTransient
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     private User author;
 
     /**

@@ -4,7 +4,6 @@ import local.jordi.kwetter.dao.IUserDao;
 import local.jordi.kwetter.domain.Tweet;
 import local.jordi.kwetter.domain.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CollectionUserDao extends AbstractCollectionDao<User> implements IUserDao
@@ -21,5 +20,23 @@ public class CollectionUserDao extends AbstractCollectionDao<User> implements IU
         }
 
         return false;
+    }
+
+    @Override
+    public List<User> findByPartialName(String tag)
+    {
+        return null;
+    }
+
+    @Override
+    public List<Tweet> getLatest10Tweets(long id)
+    {
+        return null;
+    }
+
+    @Override
+    public List<Tweet> getTweets(long id)
+    {
+        return null;
     }
 }

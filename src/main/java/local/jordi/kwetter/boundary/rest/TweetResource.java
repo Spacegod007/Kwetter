@@ -5,6 +5,7 @@ import local.jordi.kwetter.service.ITweetService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
@@ -14,6 +15,7 @@ public class TweetResource
 {
     @Inject
     private ITweetService tweetService;
+
 
     @GET
     @Path("{id}")
@@ -32,32 +34,28 @@ public class TweetResource
     }
 
     @GET
-    @Path("{id}/replyTo")
+    @Path("{id}/replyto")
     public Response getTweetResponseTo(@PathParam("id") long id)
     {
         Tweet tweet = tweetService.Get(id);
         return ResourceHelper.GenerateResponse(tweet.getRepsonseTo());
     }
 
-    @GET
-    @Path("{id}/author")
-    public Response getTweetAuthor(@PathParam("id") long id)
-    {
-        Tweet tweet = tweetService.Get(id);
-        return ResourceHelper.GenerateResponse(tweet.getAuthor());
-    }
-
     @POST
-    public Response sendTweet(Tweet tweet)
+    public Response sendTweet(JsonObject jsonObject)
     {
-        tweetService.SendTweet(tweet);
-        return ResourceHelper.GenerateResponse();
+        Tweet tweet = ResourceHelper.JsonToObject(jsonObject, Tweet.class);
+
+        Tweet create = tweetService.Create(tweet);
+        return ResourceHelper.GenerateResponse(create);
     }
 
     @PUT
     @Path("{id}/reaction")
-    public Response sendReaction(@PathParam("id") long id, Tweet reaction)
+    public Response sendReaction(@PathParam("id") long id, JsonObject jsonObject)
     {
+        Tweet reaction = ResourceHelper.JsonToObject(jsonObject, Tweet.class);
+
         Tweet tweet = tweetService.Get(id);
         tweetService.SendReaction(tweet, reaction);
         return ResourceHelper.GenerateResponse();
@@ -65,8 +63,10 @@ public class TweetResource
 
     @PUT
     @Path("{id}")
-    public Response updateTweet(@PathParam("id") long id, Tweet tweet)
+    public Response updateTweet(@PathParam("id") long id, JsonObject jsonObject)
     {
+        Tweet tweet = ResourceHelper.JsonToObject(jsonObject, Tweet.class);
+
         Tweet result = tweetService.Update(tweet);
         return ResourceHelper.GenerateResponse(result);
     }

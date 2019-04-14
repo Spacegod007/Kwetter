@@ -63,8 +63,7 @@ public class UserService implements IUserService
     @Override
     public List<Tweet> Get10LatestTweets(User user)
     {
-        User managedUser = Get(user);
-        return managedUser.getLatest10Tweets();
+        return userDao.getLatest10Tweets(user.getId());
     }
 
     @Override
@@ -83,5 +82,17 @@ public class UserService implements IUserService
         User managedFollowedUser = Get(followedUser);
 
         managedUser.unFollow(managedFollowedUser);
+    }
+
+    @Override
+    public List<User> Find(String tag)
+    {
+        return userDao.findByPartialName(tag);
+    }
+
+    @Override
+    public List<Tweet> GetTweets(User user)
+    {
+        return userDao.getTweets(user.getId());
     }
 }

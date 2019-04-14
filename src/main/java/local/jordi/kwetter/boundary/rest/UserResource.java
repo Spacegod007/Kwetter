@@ -1,13 +1,15 @@
 package local.jordi.kwetter.boundary.rest;
 
+import local.jordi.kwetter.domain.Tweet;
 import local.jordi.kwetter.domain.User;
 import local.jordi.kwetter.service.IUserService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.json.JsonObject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -18,22 +20,26 @@ public class UserResource
     private IUserService userService;
 
     @GET
-    public Response getAllUsers()
-    {
-        List<User> users = new ArrayList<>();
-        for(int i = 1; i < 5; i++)
-        {
-            users.add(userService.Get(i));
-        }
-        return ResourceHelper.GenerateResponse(users);
-    }
-
-    @GET
     @Path("{id}")
     public Response getUser(@PathParam("id") long id)
     {
-        User result = userService.Get(id);
-        return ResourceHelper.GenerateResponse(result);
+        try
+        {
+            User result = userService.Get(id);
+            return ResourceHelper.GenerateResponse(result);
+        }
+        catch (Exception e)
+        {
+            return ResourceHelper.GenerateResponse(null);
+        }
+    }
+
+    @GET
+    @Path("search/{tag}")
+    public Response findUserByName(@PathParam("tag") String tag)
+    {
+        List<User> find = userService.Find(tag);
+        return ResourceHelper.GenerateResponse(find);
     }
 
     @GET
@@ -57,7 +63,8 @@ public class UserResource
     public Response getLatestTweets(@PathParam("id") long id)
     {
         User user = userService.Get(id);
-        return ResourceHelper.GenerateResponse(user.getLatest10Tweets());
+        List<Tweet> tweets = userService.Get10LatestTweets(user);
+        return ResourceHelper.GenerateResponse(tweets);
     }
 
     @GET
@@ -65,18 +72,23 @@ public class UserResource
     public Response getUserTweets(@PathParam("id") long id)
     {
         User user = userService.Get(id);
-        return ResourceHelper.GenerateResponse(user.getTweets());
+        List<Tweet> tweets = userService.GetTweets(user);
+        return ResourceHelper.GenerateResponse(tweets);
     }
 
     @POST
-    public Response registerUser(User user)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response registerUser(JsonObject jsonObject)
     {
+        User user = ResourceHelper.JsonToObject(jsonObject, User.class);
+
         User result = userService.Create(user);
         return ResourceHelper.GenerateResponse(result);
     }
 
     @PUT
     @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUser(@PathParam("id") long id, User user)
     {
         User result = userService.Update(user);

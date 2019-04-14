@@ -12,4 +12,8 @@ public interface IUserService extends IService<User>
     boolean Follow(User user, User followUser);
 
     void UnFollow(User user, User followedUser);
+
+    List<User> Find(String tag);
+
+    List<Tweet> GetTweets(User user);
 }
