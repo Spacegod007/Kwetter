@@ -29,13 +29,13 @@ public class CollectionUserDao extends AbstractCollectionDao<User> implements IU
     }
 
     @Override
-    public List<Tweet> getLatest10Tweets(long id)
+    public List<Tweet> getTweets(long id)
     {
         return null;
     }
 
     @Override
-    public List<Tweet> getTweets(long id)
+    public List<Tweet> GetFeed(long id)
     {
         return null;
     }

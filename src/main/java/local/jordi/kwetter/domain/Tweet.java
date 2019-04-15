@@ -133,6 +133,11 @@ public class Tweet implements Serializable, IDomainObject
         reactions.remove(tweet);
     }
 
+    public boolean hasReactions()
+    {
+        return !reactions.isEmpty();
+    }
+
     @Override
     public void setId(long id)
     {

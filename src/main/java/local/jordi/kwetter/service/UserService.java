@@ -63,7 +63,8 @@ public class UserService implements IUserService
     @Override
     public List<Tweet> Get10LatestTweets(User user)
     {
-        return userDao.getLatest10Tweets(user.getId());
+        List<Tweet> tweets = userDao.getTweets(user.getId());
+        return tweets.size() < 10 ? tweets : tweets.subList(0, 10);
     }
 
     @Override
@@ -94,5 +95,11 @@ public class UserService implements IUserService
     public List<Tweet> GetTweets(User user)
     {
         return userDao.getTweets(user.getId());
+    }
+
+    @Override
+    public List<Tweet> GetFeed(User user)
+    {
+        return userDao.GetFeed(user.getId());
     }
 }

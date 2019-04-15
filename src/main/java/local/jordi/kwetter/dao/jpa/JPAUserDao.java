@@ -29,17 +29,17 @@ public class JPAUserDao extends AbstractJPADao<User> implements IUserDao
     }
 
     @Override
-    public List<Tweet> getLatest10Tweets(long id)
+    public List<Tweet> getTweets(long id)
     {
-        TypedQuery<Tweet> namedQuery = entityManager.createNamedQuery("User.getLatestTweets", Tweet.class);
+        TypedQuery<Tweet> namedQuery = entityManager.createNamedQuery("User.getTweets", Tweet.class);
         namedQuery.setParameter("id", id);
         return namedQuery.getResultList();
     }
 
     @Override
-    public List<Tweet> getTweets(long id)
+    public List<Tweet> GetFeed(long id)
     {
-        TypedQuery<Tweet> namedQuery = entityManager.createNamedQuery("User.getTweets", Tweet.class);
+        TypedQuery<Tweet> namedQuery = entityManager.createNamedQuery("User.getFeed", Tweet.class);
         namedQuery.setParameter("id", id);
         return namedQuery.getResultList();
     }

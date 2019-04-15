@@ -76,6 +76,15 @@ public class UserResource
         return ResourceHelper.GenerateResponse(tweets);
     }
 
+    @GET
+    @Path("{id}/feed")
+    public Response getUserFeed(@PathParam("id") long id)
+    {
+        User user = userService.Get(id);
+        List<Tweet> tweets = userService.GetFeed(user);
+        return ResourceHelper.GenerateResponse(tweets);
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response registerUser(JsonObject jsonObject)

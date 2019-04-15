@@ -16,4 +16,6 @@ public interface IUserService extends IService<User>
     List<User> Find(String tag);
 
     List<Tweet> GetTweets(User user);
+
+    List<Tweet> GetFeed(User user);
 }

@@ -10,7 +10,7 @@ public interface IUserDao extends IDao<User>
     boolean userWithNameExists(String name);
     List<User> findByPartialName(String tag);
 
-    List<Tweet> getLatest10Tweets(long id);
-
     List<Tweet> getTweets(long id);
+
+    List<Tweet> GetFeed(long id);
 }
