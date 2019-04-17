@@ -13,7 +13,8 @@ import java.util.Set;
         @NamedQuery(name = "User.getUserByName", query = "SELECT COUNT(u) FROM User AS u WHERE u.name = :name"),
         @NamedQuery(name = "User.findByPartialName", query = "SELECT u FROM User AS u WHERE u.name LIKE CONCAT('%', :tag, '%')"),
         @NamedQuery(name = "User.getTweets", query = "SELECT t FROM Tweet AS t WHERE t.author.id = :id AND t.responseToTweet IS NULL ORDER BY t.date DESC"),
-        @NamedQuery(name = "User.getFeed", query = "SELECT t FROM Tweet AS t WHERE (t.author IN (SElECT u FROM User AS u JOIN u.followers f WHERE f.id = :id) OR t.author.id = :id) AND t.responseToTweet IS NULL ORDER BY t.date DESC")
+        @NamedQuery(name = "User.getFeed", query = "SELECT t FROM Tweet AS t WHERE (t.author IN (SElECT u FROM User AS u JOIN u.followers f WHERE f.id = :id) OR t.author.id = :id) AND t.responseToTweet IS NULL ORDER BY t.date DESC"),
+        @NamedQuery(name = "User.getByName", query = "SELECT u FROM User AS u WHERE u.name = :name")
 })
 public class User implements IDomainObject, Serializable
 {

@@ -1,5 +1,6 @@
 package local.jordi.kwetter.boundary.rest;
 
+import local.jordi.kwetter.boundary.rest.security.RequiresJWT;
 import local.jordi.kwetter.domain.Tweet;
 import local.jordi.kwetter.service.ITweetService;
 
@@ -42,6 +43,7 @@ public class TweetResource
     }
 
     @POST
+    @RequiresJWT
     public Response sendTweet(JsonObject jsonObject)
     {
         Tweet tweet = ResourceHelper.JsonToObject(jsonObject, Tweet.class);
@@ -51,6 +53,7 @@ public class TweetResource
     }
 
     @PUT
+    @RequiresJWT
     @Path("{id}/reaction")
     public Response sendReaction(@PathParam("id") long id, JsonObject jsonObject)
     {
@@ -62,6 +65,7 @@ public class TweetResource
     }
 
     @PUT
+    @RequiresJWT
     @Path("{id}")
     public Response updateTweet(@PathParam("id") long id, JsonObject jsonObject)
     {
@@ -72,6 +76,7 @@ public class TweetResource
     }
 
     @DELETE
+    @RequiresJWT
     @Path("{id}")
     public Response deleteTweet(@PathParam("id") long id)
     {

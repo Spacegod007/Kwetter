@@ -1,5 +1,6 @@
 package local.jordi.kwetter.boundary.rest;
 
+import local.jordi.kwetter.boundary.rest.security.RequiresJWT;
 import local.jordi.kwetter.domain.Tweet;
 import local.jordi.kwetter.domain.User;
 import local.jordi.kwetter.service.IUserService;
@@ -77,6 +78,7 @@ public class UserResource
     }
 
     @GET
+    @RequiresJWT
     @Path("{id}/feed")
     public Response getUserFeed(@PathParam("id") long id)
     {
@@ -96,6 +98,7 @@ public class UserResource
     }
 
     @PUT
+    @RequiresJWT
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUser(@PathParam("id") long id, User user)
@@ -105,6 +108,7 @@ public class UserResource
     }
 
     @PUT
+    @RequiresJWT
     @Path("{id}/follow/{followId}")
     public Response followUser(@PathParam("id") long id, @PathParam("followId") long followId)
     {
@@ -117,6 +121,7 @@ public class UserResource
     }
 
     @PUT
+    @RequiresJWT
     @Path("{id}/unfollow/{followId}")
     public Response unFollowUser(@PathParam("id") long id, @PathParam("followId") long followId)
     {
@@ -129,6 +134,7 @@ public class UserResource
     }
 
     @DELETE
+    @RequiresJWT
     @Path("{id}")
     public Response removeUser(@PathParam("id") long id)
     {

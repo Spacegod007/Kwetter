@@ -5,7 +5,7 @@ import local.jordi.kwetter.domain.User;
 
 import java.util.List;
 
-public interface IUserDao extends IDao<User>
+public interface IUserDao extends IDao<User>, IAuthenticateDao
 {
     boolean userWithNameExists(String name);
     List<User> findByPartialName(String tag);

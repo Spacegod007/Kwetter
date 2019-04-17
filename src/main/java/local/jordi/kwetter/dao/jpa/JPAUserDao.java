@@ -43,4 +43,12 @@ public class JPAUserDao extends AbstractJPADao<User> implements IUserDao
         namedQuery.setParameter("id", id);
         return namedQuery.getResultList();
     }
+
+    @Override
+    public User getUserByName(String name)
+    {
+        TypedQuery<User> namedQuery = entityManager.createNamedQuery("User.getByName", User.class);
+        namedQuery.setParameter("name", name);
+        return namedQuery.getSingleResult();
+    }
 }

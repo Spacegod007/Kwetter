@@ -39,4 +39,10 @@ public class CollectionUserDao extends AbstractCollectionDao<User> implements IU
     {
         return null;
     }
+
+    @Override
+    public User getUserByName(String name)
+    {
+        return null;
+    }
 }
