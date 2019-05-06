@@ -1,23 +1,44 @@
 package local.jordi.kwetter.domain;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class User implements IDomainObject
+@Entity
+@NamedQueries({
+        @NamedQuery(name = "User.getUserByName", query = "SELECT COUNT(u) FROM User AS u WHERE u.name = :name"),
+        @NamedQuery(name = "User.findByPartialName", query = "SELECT u FROM User AS u WHERE u.name LIKE CONCAT('%', :tag, '%')"),
+        @NamedQuery(name = "User.getTweets", query = "SELECT t FROM Tweet AS t WHERE t.author.id = :id AND t.responseToTweet IS NULL ORDER BY t.date DESC"),
+        @NamedQuery(name = "User.getFeed", query = "SELECT t FROM Tweet AS t WHERE (t.author IN (SElECT u FROM User AS u JOIN u.followers f WHERE f.id = :id) OR t.author.id = :id) AND t.responseToTweet IS NULL ORDER BY t.date DESC"),
+        @NamedQuery(name = "User.getByName", query = "SELECT u FROM User AS u WHERE u.name = :name")
+})
+public class User implements IDomainObject, Serializable
 {
-    //@Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String name;
-    private String password;
     private String biography;
     private String website;
 
+    @JsonbTransient
+    private String password;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)
+    @JsonbTransient
     private List<Tweet> tweets;
+
+    @ManyToMany(mappedBy = "followers")
+    @JsonbTransient
     private Set<User> following;
+
+    @ManyToMany
+    @JsonbTransient
     private Set<User> followers;
 
     /**
@@ -30,6 +51,7 @@ public class User implements IDomainObject
     public User(String name, String password, String biography, String website)
     {
         this(name, biography, website);
+
         setPassword(password);
     }
 
@@ -50,6 +72,58 @@ public class User implements IDomainObject
         followers = new HashSet<>();
     }
 
+    public User()
+    {
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        if (name == null || name.isEmpty())
+        {
+            throw new IllegalArgumentException("name cannot be null or empty");
+        }
+        this.name = name;
+    }
+
+    public String getPassword()
+    {
+        return password;
+    }
+
+    public void setPassword(String password)
+    {
+        if (password == null || password.isEmpty())
+        {
+            throw new IllegalArgumentException("password cannot be null or empty");
+        }
+        this.password = password;
+    }
+
+    public String getBiography()
+    {
+        return biography;
+    }
+
+    public void setBiography(String biography)
+    {
+        this.biography = biography;
+    }
+
+    public String getWebsite()
+    {
+        return website;
+    }
+
+    public void setWebsite(String website)
+    {
+        this.website = website;
+    }
+
     /**
      * Lets this user follow the given user
      * @param user The user to follow
@@ -59,7 +133,7 @@ public class User implements IDomainObject
     {
         if (this == user || user == null)
         {
-            return false;
+            throw new IllegalArgumentException("Cannot follow yourself or null");
         }
 
         if (following.add(user))
@@ -84,81 +158,9 @@ public class User implements IDomainObject
         user.followers.remove(this);
     }
 
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        if (name == null || name.isEmpty())
-        {
-            throw new IllegalArgumentException("name cannot be null or empty");
-        }
-        this.name = name;
-    }
-
-    public String getBiography()
-    {
-        return biography;
-    }
-
-    public void setBiography(String biography)
-    {
-        this.biography = biography;
-    }
-
-    public String getWebsite()
-    {
-        return website;
-    }
-
-    public void setWebsite(String website)
-    {
-        this.website = website;
-    }
-
-    @Override
-    public long getId()
-    {
-        return id;
-    }
-
-    @Override
-    public void setId(long id)
-    {
-        this.id = id;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword(String password)
-    {
-        if (password == null || password.isEmpty())
-        {
-            throw new IllegalArgumentException("password cannot be null or empty");
-        }
-        this.password = password;
-    }
-
     public List<Tweet> getTweets()
     {
         return tweets;
-    }
-
-    public List<Tweet> getLatest10Tweets()
-    {
-        List<Tweet> latestTweets = new ArrayList<>();
-
-        for (int i = 0; i < 10; i++)
-        {
-            latestTweets.add(tweets.get(i));
-        }
-
-        return latestTweets;
     }
 
     public void addTweet(Tweet tweet)
@@ -179,5 +181,17 @@ public class User implements IDomainObject
     public Set<User> getFollowers()
     {
         return followers;
+    }
+
+    @Override
+    public long getId()
+    {
+        return id;
+    }
+
+    @Override
+    public void setId(long id)
+    {
+        this.id = id;
     }
 }

@@ -44,7 +44,7 @@ public class TweetTest
     @Test
     public void CreateValidTweet2()
     {
-        new Tweet(tweetText1, testUser1, 0);
+        new Tweet(tweetText1, testUser1, testTweet2);
     }
 
     @Test

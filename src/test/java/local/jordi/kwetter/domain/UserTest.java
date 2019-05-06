@@ -1,5 +1,6 @@
 package local.jordi.kwetter.domain;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -146,11 +147,9 @@ public class UserTest
     @Test
     public void InvalidFollowUser()
     {
-        boolean expectedFalseResult = testUser1.follow(testUser1);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> testUser1.follow(testUser1), "User should not be able to follow him/herself");
         Set<User> user1Following = testUser1.getFollowing();
         Set<User> user1Followers = testUser1.getFollowers();
-
-        Assertions.assertFalse(expectedFalseResult, "User1 should not be able to follow itself");
 
         if (user1Following.contains(testUser1))
         {
@@ -166,11 +165,9 @@ public class UserTest
     @Test
     public void InvalidFollowUser2()
     {
-        boolean expectedFalseResult = testUser1.follow(null);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> testUser1.follow(null), "User should not be able to follow null");
         Set<User> user1Following = testUser1.getFollowing();
         Set<User> user1Followers = testUser1.getFollowers();
-
-        Assertions.assertFalse(expectedFalseResult, "User1 should not be able to follow itself");
 
         if (user1Following.contains(testUser1))
         {
