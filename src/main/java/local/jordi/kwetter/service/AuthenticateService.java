@@ -20,7 +20,6 @@ public class AuthenticateService implements IAuthenticateService
         {
             return user.getId();
         }
-//        throw new IllegalArgumentException("invalid credentials supplied");
-        return 1;
+        throw new IllegalArgumentException("invalid credentials supplied");
     }
 }
