@@ -158,6 +158,7 @@ public class User implements IDomainObject, Serializable
         user.followers.remove(this);
     }
 
+    @JsonbTransient
     public List<Tweet> getTweets()
     {
         return tweets;
