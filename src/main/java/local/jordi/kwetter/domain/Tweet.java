@@ -1,5 +1,7 @@
 package local.jordi.kwetter.domain;
 
+import org.springframework.hateoas.ResourceSupport;
+
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,10 +10,10 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-public class Tweet implements Serializable, IDomainObject
+public class Tweet extends ResourceSupport implements Serializable, IDomainObject
 {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected long id;
+    protected long tweetId;
 
     private String text;
     private Date date;
@@ -139,14 +141,14 @@ public class Tweet implements Serializable, IDomainObject
     }
 
     @Override
-    public void setId(long id)
+    public void setDomainId(long id)
     {
-        this.id = id;
+        this.tweetId = id;
     }
 
     @Override
-    public long getId()
+    public long getDomainId()
     {
-        return id;
+        return tweetId;
     }
 }

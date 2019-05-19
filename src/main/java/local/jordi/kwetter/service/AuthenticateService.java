@@ -18,7 +18,7 @@ public class AuthenticateService implements IAuthenticateService
         User user = authenticateDao.getUserByName(username);
         if (user != null && user.getPassword().equals(password))
         {
-            return user.getId();
+            return user.getDomainId();
         }
         throw new IllegalArgumentException("invalid credentials supplied");
     }

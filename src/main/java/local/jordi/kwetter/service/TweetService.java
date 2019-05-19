@@ -30,13 +30,13 @@ public class TweetService implements ITweetService
             return tweet;
         }
 
-        throw new IllegalArgumentException("Invalid tweet id was supplied");
+        throw new IllegalArgumentException("Invalid tweet tweetId was supplied");
     }
 
     @Override
     public Tweet Get(Tweet tweet)
     {
-        return Get(tweet.getId());
+        return Get(tweet.getDomainId());
     }
 
     @Override

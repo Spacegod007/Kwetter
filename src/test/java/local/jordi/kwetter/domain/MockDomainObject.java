@@ -5,13 +5,13 @@ public class MockDomainObject implements IDomainObject
     private long id;
 
     @Override
-    public void setId(long id)
+    public void setDomainId(long id)
     {
         this.id = id;
     }
 
     @Override
-    public long getId()
+    public long getDomainId()
     {
         return id;
     }

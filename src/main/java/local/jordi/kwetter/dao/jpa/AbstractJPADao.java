@@ -24,6 +24,7 @@ public abstract class AbstractJPADao <T extends IDomainObject> implements IDao<T
     public T Create(T t)
     {
         entityManager.persist(t);
+        entityManager.flush();
         return t;
     }
 

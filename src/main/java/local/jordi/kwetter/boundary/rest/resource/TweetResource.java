@@ -1,4 +1,4 @@
-package local.jordi.kwetter.boundary.rest;
+package local.jordi.kwetter.boundary.rest.resource;
 
 import local.jordi.kwetter.boundary.rest.security.RequiresJWT;
 import local.jordi.kwetter.domain.Tweet;
@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Stateless
@@ -16,7 +17,6 @@ public class TweetResource
 {
     @Inject
     private ITweetService tweetService;
-
 
     @GET
     @Path("{id}")
@@ -44,16 +44,20 @@ public class TweetResource
 
     @POST
     @RequiresJWT
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response sendTweet(JsonObject jsonObject)
     {
         Tweet tweet = ResourceHelper.JsonToObject(jsonObject, Tweet.class);
+        Tweet createdTweets = tweetService.Create(tweet);
 
-        Tweet create = tweetService.Create(tweet);
-        return ResourceHelper.GenerateResponse(create);
+        ResourceHelper.addTweetLinks(createdTweets);
+
+        return ResourceHelper.GenerateResponse(createdTweets);
     }
 
     @PUT
     @RequiresJWT
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("{id}/reaction")
     public Response sendReaction(@PathParam("id") long id, JsonObject jsonObject)
     {
@@ -66,6 +70,7 @@ public class TweetResource
 
     @PUT
     @RequiresJWT
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("{id}")
     public Response updateTweet(@PathParam("id") long id, JsonObject jsonObject)
     {
@@ -84,4 +89,6 @@ public class TweetResource
         tweetService.Remove(tweet);
         return ResourceHelper.GenerateResponse();
     }
+
+
 }

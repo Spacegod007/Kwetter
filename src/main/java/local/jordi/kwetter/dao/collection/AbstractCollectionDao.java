@@ -21,7 +21,7 @@ public abstract class AbstractCollectionDao <T extends IDomainObject> implements
     @Override
     public T Create(T t)
     {
-        t.setId(atomicLong.getAndIncrement());
+        t.setDomainId(atomicLong.getAndIncrement());
         objectList.add(t);
         return t;
     }
@@ -31,7 +31,7 @@ public abstract class AbstractCollectionDao <T extends IDomainObject> implements
     {
         for (T t : objectList)
         {
-            if (t.getId() == id)
+            if (t.getDomainId() == id)
             {
                 return t;
             }
@@ -45,7 +45,7 @@ public abstract class AbstractCollectionDao <T extends IDomainObject> implements
     {
         for (int i = 0; i < objectList.size(); i++)
         {
-            if (objectList.get(i).getId() == t.getId())
+            if (objectList.get(i).getDomainId() == t.getDomainId())
             {
                 objectList.set(i, t);
                 return t;

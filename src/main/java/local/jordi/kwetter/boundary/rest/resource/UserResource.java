@@ -1,4 +1,4 @@
-package local.jordi.kwetter.boundary.rest;
+package local.jordi.kwetter.boundary.rest.resource;
 
 import local.jordi.kwetter.boundary.rest.security.RequiresJWT;
 import local.jordi.kwetter.domain.Tweet;
@@ -12,6 +12,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+
 
 @Stateless
 @Path("users")
@@ -27,6 +28,7 @@ public class UserResource
         try
         {
             User result = userService.Get(id);
+
             return ResourceHelper.GenerateResponse(result);
         }
         catch (Exception e)
@@ -92,8 +94,9 @@ public class UserResource
     public Response registerUser(JsonObject jsonObject)
     {
         User user = ResourceHelper.JsonToObject(jsonObject, User.class);
-
         User result = userService.Create(user);
+        ResourceHelper.addUserLinks(result);
+
         return ResourceHelper.GenerateResponse(result);
     }
 

@@ -28,13 +28,13 @@ public class UserService implements IUserService
             return user;
         }
 
-        throw new IllegalArgumentException("Invalid user id was supplied");
+        throw new IllegalArgumentException("Invalid user tweetId was supplied");
     }
 
     @Override
     public User Get(User user)
     {
-        return Get(user.getId());
+        return Get(user.getDomainId());
     }
 
     @Override
@@ -63,7 +63,7 @@ public class UserService implements IUserService
     @Override
     public List<Tweet> Get10LatestTweets(User user)
     {
-        List<Tweet> tweets = userDao.getTweets(user.getId());
+        List<Tweet> tweets = userDao.getTweets(user.getDomainId());
         return tweets.size() < 10 ? tweets : tweets.subList(0, 10);
     }
 
@@ -94,12 +94,12 @@ public class UserService implements IUserService
     @Override
     public List<Tweet> GetTweets(User user)
     {
-        return userDao.getTweets(user.getId());
+        return userDao.getTweets(user.getDomainId());
     }
 
     @Override
     public List<Tweet> GetFeed(User user)
     {
-        return userDao.GetFeed(user.getId());
+        return userDao.GetFeed(user.getDomainId());
     }
 }

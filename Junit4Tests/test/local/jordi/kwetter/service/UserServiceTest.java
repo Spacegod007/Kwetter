@@ -1,6 +1,5 @@
 package local.jordi.kwetter.service;
 
-import local.jordi.kwetter.dao.ITweetDao;
 import local.jordi.kwetter.dao.IUserDao;
 import local.jordi.kwetter.domain.Tweet;
 import local.jordi.kwetter.domain.User;
@@ -66,14 +65,14 @@ public class UserServiceTest
 
         user = new User(username, password, userBiography, userWebsite);
         managedUser = new User(username, password, userBiography, userWebsite);
-        managedUser.setId(id);
+        managedUser.setDomainId(id);
 
         user2 = new User(username2, password2, userBiography2, userWebsite2);
         managedUser2 = new User(username2, password2, userBiography2, userWebsite2);
-        managedUser2.setId(id2);
+        managedUser2.setDomainId(id2);
 
-        when(userDao.Get(managedUser.getId())).thenReturn(managedUser);
-        when(userDao.Get(managedUser2.getId())).thenReturn(managedUser2);
+        when(userDao.Get(managedUser.getDomainId())).thenReturn(managedUser);
+        when(userDao.Get(managedUser2.getDomainId())).thenReturn(managedUser2);
     }
 
     @Test
@@ -84,7 +83,7 @@ public class UserServiceTest
 
         User createdUser = userService.Create(user);
 
-        Assert.assertEquals(1, createdUser.getId());
+        Assert.assertEquals(1, createdUser.getDomainId());
     }
 
     @Test
@@ -131,13 +130,13 @@ public class UserServiceTest
     {
         List<Tweet> tweets = u.getTweets();
         Tweet errorTweet = new Tweet(testTweetText, managedUser);
-        errorTweet.setId(0);
+        errorTweet.setDomainId(0);
         u.addTweet(errorTweet);
 
         for (int i = 1; i <= 10; i++)
         {
             Tweet tweet = new Tweet(testTweetText2, managedUser);
-            tweet.setId(i);
+            tweet.setDomainId(i);
             tweets.add(tweet);
         }
     }

@@ -46,18 +46,18 @@ public class UserServiceIntegrationTest
 
         User managedUser = userService.Create(user);
 
-        long id = managedUser.getId();
+        long id = managedUser.getDomainId();
         User obtainedUser = userService.Get(id);
 
-        Assert.assertEquals("The id was not set correctly while creating the user", expectedId, id);
-        Assert.assertNotNull("The user found with the id was null while it should've contained the created user", obtainedUser);
+        Assert.assertEquals("The tweetId was not set correctly while creating the user", expectedId, id);
+        Assert.assertNotNull("The user found with the tweetId was null while it should've contained the created user", obtainedUser);
     }
 
     @Test
     public void GetUserTest()
     {
         User managedUser = userService.Create(UserServiceIntegrationTest.user);
-        long id = managedUser.getId();
+        long id = managedUser.getDomainId();
 
         User obtainedUser = userService.Get(id);
 
@@ -69,12 +69,12 @@ public class UserServiceIntegrationTest
     {
         String updatedName = "updated name";
         User createdUser = userService.Create(user);
-        long id = createdUser.getId();
+        long id = createdUser.getDomainId();
         createdUser.setName(updatedName);
 
         User updatedUser = userService.Update(user);
 
-        Assert.assertEquals("While updating the user, the id should not have changed, however it did", id, updatedUser.getId());
+        Assert.assertEquals("While updating the user, the tweetId should not have changed, however it did", id, updatedUser.getDomainId());
         Assert.assertEquals("The name of the user was not updated while this was changed before calling the update method", updatedName, updatedUser.getName());
     }
 
@@ -82,12 +82,12 @@ public class UserServiceIntegrationTest
     public void RemoveUserTest()
     {
         User createduser = userService.Create(user);
-        long createduserId = createduser.getId();
+        long createduserId = createduser.getDomainId();
 
         userService.Remove(createduser);
 
         User removedUser = userDao.Get(createduserId);
 
-        Assert.assertNull("an id was found while the user was removed, this suggests the user was not actually removed", removedUser);
+        Assert.assertNull("an tweetId was found while the user was removed, this suggests the user was not actually removed", removedUser);
     }
 }

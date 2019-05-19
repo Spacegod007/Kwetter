@@ -19,9 +19,9 @@ public class JPATweetDao extends AbstractJPADao<Tweet> implements ITweetDao
 //    }
 //
 //    @Override
-//    public Tweet Get(long id)
+//    public Tweet Get(long tweetId)
 //    {
-//        return entityManager.find(Tweet.class, id);
+//        return entityManager.find(Tweet.class, tweetId);
 //    }
 //
 //    @Override

@@ -12,9 +12,9 @@ public class MockDomainObjectTest
 
         MockDomainObject mockDomainObject = new MockDomainObject();
 
-        mockDomainObject.setId(SET_ID);
-        long obtainedId = mockDomainObject.getId();
+        mockDomainObject.setDomainId(SET_ID);
+        long obtainedId = mockDomainObject.getDomainId();
 
-        Assertions.assertEquals(SET_ID, obtainedId, "The set id is not equal to the obtained id");
+        Assertions.assertEquals(SET_ID, obtainedId, "The set tweetId is not equal to the obtained tweetId");
     }
 }

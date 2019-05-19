@@ -1,5 +1,7 @@
 package local.jordi.kwetter.domain;
 
+import org.springframework.hateoas.ResourceSupport;
+
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,15 +14,15 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(name = "User.getUserByName", query = "SELECT COUNT(u) FROM User AS u WHERE u.name = :name"),
         @NamedQuery(name = "User.findByPartialName", query = "SELECT u FROM User AS u WHERE u.name LIKE CONCAT('%', :tag, '%')"),
-        @NamedQuery(name = "User.getTweets", query = "SELECT t FROM Tweet AS t WHERE t.author.id = :id AND t.responseToTweet IS NULL ORDER BY t.date DESC"),
-        @NamedQuery(name = "User.getFeed", query = "SELECT t FROM Tweet AS t WHERE (t.author IN (SElECT u FROM User AS u JOIN u.followers f WHERE f.id = :id) OR t.author.id = :id) AND t.responseToTweet IS NULL ORDER BY t.date DESC"),
+        @NamedQuery(name = "User.getTweets", query = "SELECT t FROM Tweet AS t WHERE t.author.userId = :id AND t.responseToTweet IS NULL ORDER BY t.date DESC"),
+        @NamedQuery(name = "User.getFeed", query = "SELECT t FROM Tweet AS t WHERE (t.author IN (SElECT u FROM User AS u JOIN u.followers f WHERE f.userId = :id) OR t.author.userId = :id) AND t.responseToTweet IS NULL ORDER BY t.date DESC"),
         @NamedQuery(name = "User.getByName", query = "SELECT u FROM User AS u WHERE u.name = :name")
 })
-public class User implements IDomainObject, Serializable
+public class User extends ResourceSupport implements IDomainObject, Serializable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long userId;
 
     private String name;
     private String biography;
@@ -185,14 +187,14 @@ public class User implements IDomainObject, Serializable
     }
 
     @Override
-    public long getId()
+    public long getDomainId()
     {
-        return id;
+        return userId;
     }
 
     @Override
-    public void setId(long id)
+    public void setDomainId(long id)
     {
-        this.id = id;
+        this.userId = id;
     }
 }
